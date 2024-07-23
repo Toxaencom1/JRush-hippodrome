@@ -24,40 +24,40 @@ class HorseTest {
 
     @BeforeEach
     void setUp() {
-        horse = new Horse("horse",1.0,1.0);
+        horse = new Horse("horse", 1.0, 1.0);
     }
 
     @Test
     @DisplayName("Тест на null первого аргумента")
-    void testNullName(){
+    void testNullName() {
         IllegalArgumentException iAException = assertThrows(IllegalArgumentException.class,
-                () -> new Horse(null,1.0,1.0));
+                () -> new Horse(null, 1.0, 1.0));
         assertEquals("Name cannot be null.", iAException.getMessage());
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"", " ", "  ", "   ","      " })
+    @ValueSource(strings = {"", " ", "\t", "   ", "\t\t", "\n"})
     @DisplayName("Тест, что при передаче в конструктор первым параметром пустой строки или строки содержащей " +
             "только пробельные символы (пробел, табуляция и т.д.)")
-    void testEmptyAndOtherIncorrectName(String arguments){
+    void testEmptyAndOtherIncorrectName(String arguments) {
         IllegalArgumentException iAException = assertThrows(IllegalArgumentException.class,
-                () -> new Horse(arguments,1.0,1.0));
+                () -> new Horse(arguments, 1.0, 1.0));
         assertEquals("Name cannot be blank.", iAException.getMessage());
     }
 
     @Test
     @DisplayName("Тест на отрицательную скорость")
-    void testNegativeSpeed(){
+    void testNegativeSpeed() {
         IllegalArgumentException iAException = assertThrows(IllegalArgumentException.class,
-                () -> new Horse("horse",-1.0,1.0));
+                () -> new Horse("horse", -1.0, 1.0));
         assertEquals("Speed cannot be negative.", iAException.getMessage());
     }
 
     @Test
     @DisplayName("Тест на отрицательную дистанцию")
-    void testNegativeDistance(){
+    void testNegativeDistance() {
         IllegalArgumentException iAException = assertThrows(IllegalArgumentException.class,
-                () -> new Horse("horse",1.0,-1.0));
+                () -> new Horse("horse", 1.0, -1.0));
         assertEquals("Distance cannot be negative.", iAException.getMessage());
     }
 
@@ -74,7 +74,7 @@ class HorseTest {
     void getSpeed() {
         double actualSpeed = horse.getSpeed();
 
-        assertEquals(1.0,actualSpeed,0.001);
+        assertEquals(1.0, actualSpeed, 0.001);
     }
 
     @Test
@@ -82,30 +82,40 @@ class HorseTest {
     void getDistance() {
         double actualDistance = horse.getDistance();
 
-        assertEquals(1.0,actualDistance,0.001);
+        assertEquals(1.0, actualDistance, 0.001);
     }
 
     @Test
     @DisplayName("Тест на получение дистанции если в конструкторе только 2 параметра")
     void getZeroDistance() {
         // Arrange (Подготовка)
-        Horse horseTwoParameters = new Horse("horse",1.0);
+        Horse horseTwoParameters = new Horse("horse", 1.0);
 
         double actualDistance = horseTwoParameters.getDistance();
 
-        assertEquals(0,actualDistance,0.001);
+        assertEquals(0, actualDistance, 0.001);
     }
 
     @Test
     @DisplayName("Тест, что вызывается метод move() с параметрами getRandomDouble 0.2 и 0.9")
-    void move() {
+    void testMoveInvokeMethod() {
         try (MockedStatic<Horse> mockedStatic = Mockito.mockStatic(Horse.class)) {
+            horse.move();
+
+            mockedStatic.verify(() -> Horse.getRandomDouble(0.2, 0.9), times(1));
+        }
+    }
+
+    @Test
+    @DisplayName("Тест, что метод присваивает дистанции значение высчитанное по формуле: distance + speed * getRandomDouble(0.2, 0.9)")
+    void testMove() {
+        try (MockedStatic<Horse> mockedStatic = Mockito.mockStatic(Horse.class)) {
+            double distance = horse.getDistance();
 
             mockedStatic.when(() -> Horse.getRandomDouble(0.2, 0.9)).thenReturn(0.5);
             horse.move();
 
-            mockedStatic.verify(() -> Horse.getRandomDouble(0.2, 0.9), times(1));
-            assertEquals(1.5, horse.getDistance(),0.001);
+            assertEquals(distance + horse.getSpeed() * 0.5, horse.getDistance(), 0.0001);
         }
     }
 }
