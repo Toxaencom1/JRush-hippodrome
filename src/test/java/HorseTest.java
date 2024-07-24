@@ -63,7 +63,7 @@ class HorseTest {
 
     @Test
     @DisplayName("Тест на получение имени")
-    void getName() {
+    void testGetName() {
         String actualName = horse.getName();
 
         assertEquals("horse", actualName);
@@ -71,7 +71,7 @@ class HorseTest {
 
     @Test
     @DisplayName("Тест на получение скорости")
-    void getSpeed() {
+    void testGetSpeed() {
         double actualSpeed = horse.getSpeed();
 
         assertEquals(1.0, actualSpeed, 0.001);
@@ -79,7 +79,7 @@ class HorseTest {
 
     @Test
     @DisplayName("Тест на получение дистанции")
-    void getDistance() {
+    void testGetDistance() {
         double actualDistance = horse.getDistance();
 
         assertEquals(1.0, actualDistance, 0.001);
@@ -87,7 +87,7 @@ class HorseTest {
 
     @Test
     @DisplayName("Тест на получение дистанции если в конструкторе только 2 параметра")
-    void getZeroDistance() {
+    void testGetZeroDistance() {
         // Arrange (Подготовка)
         Horse horseTwoParameters = new Horse("horse", 1.0);
 

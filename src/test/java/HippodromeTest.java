@@ -28,7 +28,7 @@ class HippodromeTest {
 
     @Test
     @DisplayName("Тест получения списка лошадей")
-    void getHorses() {
+    void testGetHorses() {
         List<Horse> horseList = new ArrayList<>();
         horseList.add(new Horse("Thunder", 22.5, 0.0));
         horseList.add(new Horse("Storm", 24.3, 0.5));
@@ -69,7 +69,7 @@ class HippodromeTest {
 
     @Test
     @DisplayName("Тест на выброс IllegalArgumentException при пустом списке")
-    void emptyHorses() {
+    void testEmptyHorses() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> new Hippodrome(new ArrayList<>()));
         assertEquals("Horses cannot be empty.", exception.getMessage());
@@ -77,7 +77,7 @@ class HippodromeTest {
 
     @Test
     @DisplayName("Тест на выброс IllegalArgumentException при null значении")
-    void nullHorses() {
+    void testNullHorses() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> new Hippodrome(null));
         assertEquals("Horses cannot be null.", exception.getMessage());
@@ -85,7 +85,7 @@ class HippodromeTest {
 
     @Test
     @DisplayName("Тест на вызов метода move() у всех лошадей")
-    void move() {
+    void testMove() {
         List<Horse> mockedHorses =  new ArrayList<>();
         for (int i = 0; i < 50; i++) {
             mockedHorses.add(Mockito.mock(Horse.class));
@@ -101,7 +101,7 @@ class HippodromeTest {
 
     @Test
     @DisplayName("Тест, что метод возвращает лошадь с самым большим значением distance.")
-    void getWinner() {
+    void testGetWinner() {
         horses = new ArrayList<>();
         horses.add(new Horse("Thunder", 22.5, 0.0));
         horses.add(new Horse("Storm", 24.3, 0.5));
